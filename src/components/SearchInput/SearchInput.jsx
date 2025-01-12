@@ -1,18 +1,25 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { MapContext } from "@/context/MapContext";
 import { fetchSearchResult } from "@/api/fetchSearchResult";
 import { Input } from "../ui/Input";
 import CancelIcon from "../../../public/CancelIcon";
+import { printMarker, removeMarker } from "@/utils/function/markerUtils";
+import primaryMarkerImage from "../../app/Restaurant.png";
 
 export default function SearchInput() {
 	const [searchValue, setSearchValue] = useState("");
+	const markerListRef = useRef([]);
 	const map = useContext(MapContext);
 
 	useEffect(() => {
 		let ignore = false;
-		
+
+		if (markerListRef.current.length) {
+			removeMarker(markerListRef);
+		}
+
 		if (searchValue) {
 			fetchSearchResult(
 				`رستوران ${searchValue}`,
@@ -20,7 +27,9 @@ export default function SearchInput() {
 				59.5528219217324
 			).then((res) => {
 				if (!ignore) {
-					console.log(res);
+					const items = res.items;
+					printMarker(items, map, primaryMarkerImage, markerListRef);
+					console.log(markerListRef);
 				}
 			});
 		}
@@ -34,6 +43,7 @@ export default function SearchInput() {
 
 	const handleCancelClick = () => {
 		setSearchValue("");
+		removeMarker(markerListRef);
 	};
 
 	return (
