@@ -2,6 +2,7 @@
 
 import { useContext, useEffect, useState } from "react";
 import { MapContext } from "@/context/MapContext";
+import { fetchSearchResult } from "@/api/fetchSearchResult";
 import { Input } from "../ui/Input";
 import CancelIcon from "../../../public/CancelIcon";
 
@@ -10,9 +11,22 @@ export default function SearchInput() {
 	const map = useContext(MapContext);
 
 	useEffect(() => {
-		console.log(map);
+		let ignore = false;
 		
-	}, []);
+		if (searchValue) {
+			fetchSearchResult(
+				`رستوران ${searchValue}`,
+				36.32708394227474,
+				59.5528219217324
+			).then((res) => {
+				if (!ignore) {
+					console.log(res);
+				}
+			});
+		}
+
+		return () => (ignore = true);
+	}, [searchValue]);
 
 	const handleInputChange = (e) => {
 		setSearchValue(e.target.value);
