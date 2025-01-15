@@ -45,7 +45,7 @@ export default function Map({ children }) {
 		}
 
 		return () => mapRef.current?.remove();
-	}, [isMapLoaded]);
+	}, []);
 
 	return (
 		<MapContext.Provider

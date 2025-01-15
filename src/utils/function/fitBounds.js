@@ -4,7 +4,7 @@ export const fitMapToBounds = (map, points, padding = 50, zoom = 15) => {
 	points.forEach((point) => {
 		bounds.extend([point.x, point.y]);
 	});
-	map.fitBounds(bounds, {
+	map?.fitBounds(bounds, {
 		padding: padding,
 		maxZoom: zoom,
 		duration: 1000,

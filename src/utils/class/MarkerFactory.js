@@ -14,8 +14,6 @@ export class MarkerFactory {
 		popupContent,
 		setRoutingInfo
 	) {
-		console.log(setRoutingInfo);
-		
 		this.map = map;
 		let dim = "40px";
 		if (hover) dim = "50px";
@@ -27,7 +25,6 @@ export class MarkerFactory {
 		this.markerElement.style.height = dim;
 		if (hover) this.markerElement.classList.add("z-20");
 		const handleRouting = () => {
-			console.log(setRoutingInfo);
 			setRoutingInfo((prev) => ({
 				...prev,
 				destinationLngLat: initialLngLat,
@@ -68,13 +65,15 @@ export class MarkerFactory {
 			.setDOMContent(popupContainer)
 			.setLngLat(initialLngLat);
 
-		this.marker = new Marker({
-			element: this.markerElement,
-			anchor: "bottom",
-		})
-			.setLngLat(initialLngLat)
-			.addTo(map)
-			.setPopup(popup);
+		if (map) {
+			this.marker = new Marker({
+				element: this.markerElement,
+				anchor: "bottom",
+			})
+				.setLngLat(initialLngLat)
+				.addTo(map)
+				.setPopup(popup);
+		}
 		this.moveHandler = this.handleMove.bind(this);
 	}
 	handleMove() {
