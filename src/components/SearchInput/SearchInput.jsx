@@ -8,6 +8,7 @@ import CancelIcon from "../../../public/CancelIcon";
 import { printMarker, removeMarker } from "@/utils/function/markerUtils";
 import primaryMarkerImage from "../../app/Restaurant.png";
 import { fitMapToBounds } from "@/utils/function/fitBounds";
+import Routing from "../Routing/Routing";
 
 export default function SearchInput() {
 	const [searchValue, setSearchValue] = useState("");
@@ -80,6 +81,8 @@ export default function SearchInput() {
 				className="bg-red cursor-pointer mx-1 rounded hover:bg-slate-300 p-1"
 				onClick={handleCancelClick}
 			/>
+
+			<Routing />
 		</>
 	);
 }
