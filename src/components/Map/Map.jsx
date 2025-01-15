@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -8,27 +7,56 @@ import { MapContext } from "@/context/MapContext";
 export default function Map({ children }) {
 	const mapRef = useRef();
 	const [isMapLoaded, setIsMapLoaded] = useState(false);
+	const [routingInfo, setRoutingInfo] = useState({
+		originLngLat: { lng: null, lat: null },
+		destinationLngLat: { lng: null, lat: null },
+	});
 
 	useEffect(() => {
-		const map = mapRef.current;
-
-		if (!map) {
+		if (!mapRef.current) {
 			mapRef.current = new maplibregl.Map({
 				container: "map",
-				style: "https://demotiles.maplibre.org/style.json",
+				style: {
+					version: 8,
+					sources: {
+						osm: {
+							type: "raster",
+							tiles: [
+								"https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
+							],
+							tileSize: 256,
+						},
+					},
+					layers: [
+						{
+							id: "osm-tiles",
+							type: "raster",
+							source: "osm",
+						},
+					],
+				},
 				center: [59.5528219217324, 36.32708394227474],
 				zoom: 5,
 			});
-			setIsMapLoaded(true);
+
+			mapRef.current.on("load", () => {
+				setIsMapLoaded(true);
+			});
 		}
 
-		return () => map?.remove();
+		return () => mapRef.current?.remove();
 	}, [isMapLoaded]);
 
 	return (
-		<MapContext value={mapRef.current}>
+		<MapContext.Provider
+			value={{
+				map: mapRef.current,
+				routingInfo,
+				setRoutingInfo,
+			}}
+		>
 			<div id="map" className="h-screen w-full"></div>
 			{children}
-		</MapContext>
+		</MapContext.Provider>
 	);
 }

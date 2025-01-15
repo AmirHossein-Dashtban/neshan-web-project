@@ -7,19 +7,37 @@ import { Input } from "../ui/Input";
 import CancelIcon from "../../../public/CancelIcon";
 import { printMarker, removeMarker } from "@/utils/function/markerUtils";
 import primaryMarkerImage from "../../app/Restaurant.png";
+import { fitMapToBounds } from "@/utils/function/fitBounds";
 
 export default function SearchInput() {
 	const [searchValue, setSearchValue] = useState("");
 	const markerListRef = useRef([]);
-	const map = useContext(MapContext);
+	const { map, routingInfo, setRoutingInfo } = useContext(MapContext);
+	
+	useEffect(() => {
+		const params = new URLSearchParams(window.location.search);
+		const searchFromUrl = params.get("search");
+		if (searchFromUrl) {
+			setSearchValue(searchFromUrl);
+		}
+	}, []);
 
 	useEffect(() => {
 		let ignore = false;
-
-		if (markerListRef.current.length) {
+		const points = [];
+		if (markerListRef) {
 			removeMarker(markerListRef);
 		}
 
+		if (searchValue) {
+			const params = new URLSearchParams(window.location.search);
+			params.set("search", searchValue);
+			window.history.pushState(null, "", `?${params.toString()}`);
+		} else {
+			const params = new URLSearchParams(window.location.search);
+			params.delete("search");
+			window.history.pushState(null, "", `?${params.toString()}`);
+		}
 		if (searchValue) {
 			fetchSearchResult(
 				`رستوران ${searchValue}`,
@@ -28,24 +46,27 @@ export default function SearchInput() {
 			).then((res) => {
 				if (!ignore) {
 					const items = res.items;
-					printMarker(items, map, primaryMarkerImage, markerListRef);
-					console.log(markerListRef);
+					printMarker(
+						items,
+						map,
+						primaryMarkerImage,
+						markerListRef,
+						setRoutingInfo
+					);
+					items.forEach((item) => points.push(item.location));
+					fitMapToBounds(map, points);
 				}
 			});
 		}
-
 		return () => (ignore = true);
-	}, [searchValue]);
-
+	}, [searchValue, map]);
 	const handleInputChange = (e) => {
 		setSearchValue(e.target.value);
 	};
-
 	const handleCancelClick = () => {
 		setSearchValue("");
 		removeMarker(markerListRef);
 	};
-
 	return (
 		<>
 			<Input
@@ -55,7 +76,6 @@ export default function SearchInput() {
 				value={searchValue}
 				onChange={handleInputChange}
 			/>
-
 			<CancelIcon
 				className="bg-red cursor-pointer mx-1 rounded hover:bg-slate-300 p-1"
 				onClick={handleCancelClick}
