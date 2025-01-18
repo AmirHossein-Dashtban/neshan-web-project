@@ -5,16 +5,17 @@ import { MapContext } from "@/context/MapContext";
 import { fetchSearchResult } from "@/api/fetchSearchResult";
 import { Input } from "../ui/Input";
 import CancelIcon from "../../../public/CancelIcon";
-import { printMarker, removeMarker } from "@/utils/function/markerUtils";
+import { removeMarker } from "@/utils/function/markerUtils";
 import primaryMarkerImage from "../../app/Restaurant.png";
 import { fitMapToBounds } from "@/utils/function/fitBounds";
-import Routing from "../Routing/Routing";
+import { MarkerWithPopup } from "../MarkerWithPopup/MarkerWithPopup";
 
 export default function SearchInput() {
 	const [searchValue, setSearchValue] = useState("");
 	const markerListRef = useRef([]);
-	const { map, routingInfo, setRoutingInfo } = useContext(MapContext);
-	
+	const [data, setData] = useState();
+	const { map } = useContext(MapContext);
+
 	useEffect(() => {
 		const params = new URLSearchParams(window.location.search);
 		const searchFromUrl = params.get("search");
@@ -37,7 +38,7 @@ export default function SearchInput() {
 		} else {
 			const params = new URLSearchParams(window.location.search);
 			params.delete("search");
-			window.history.pushState(null, "", `?${params.toString()}`);
+			window.history.pushState(null, "", `${params.toString()}`);
 		}
 		if (searchValue) {
 			fetchSearchResult(
@@ -47,27 +48,28 @@ export default function SearchInput() {
 			).then((res) => {
 				if (!ignore) {
 					const items = res.items;
-					printMarker(
-						items,
-						map,
-						primaryMarkerImage,
-						markerListRef,
-						setRoutingInfo
-					);
 					items.forEach((item) => points.push(item.location));
 					fitMapToBounds(map, points);
+					console.log(res);
+
+					setData(res.items);
 				}
 			});
 		}
+
 		return () => (ignore = true);
 	}, [searchValue, map]);
+
 	const handleInputChange = (e) => {
 		setSearchValue(e.target.value);
 	};
+
 	const handleCancelClick = () => {
 		setSearchValue("");
+		setData(null);
 		removeMarker(markerListRef);
 	};
+
 	return (
 		<>
 			<Input
@@ -82,7 +84,20 @@ export default function SearchInput() {
 				onClick={handleCancelClick}
 			/>
 
-			<Routing />
+			{data?.map((item, index) => {
+				return (
+					<MarkerWithPopup
+						key={index}
+						map={map}
+						imageUrl={primaryMarkerImage.src}
+						initialLngLat={{
+							lng: item.location.x,
+							lat: item.location.y,
+						}}
+						item={item}
+					/>
+				);
+			})}
 		</>
 	);
 }
