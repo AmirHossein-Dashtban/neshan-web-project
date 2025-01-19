@@ -100,11 +100,3 @@ export const clearMap = (map) => {
 		}
 	}
 };
-
-const isMobile = window.innerWidth < 768;
-
-const padding = isMobile
-	? { top: 25, bottom: 25, left: 25, right: 25 }
-	: { top: 300, bottom: 300, left: 300, right: 300 };
-
-const zoom = isMobile ? 12 : 15;
