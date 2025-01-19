@@ -30,7 +30,7 @@ export default function Footer({ children }) {
 				</div>
 
 				<div
-					className={`hidden tablet:flex fixed right-0 top-0 w-[300] lg:w-[375] h-full bg-slate-200 items-center justify-center`}
+					className={`hidden tablet:flex fixed right-0 top-0 w-[300px] lg:w-[375px] h-full bg-slate-200 items-center justify-center`}
 				>
 					{children}
 				</div>
