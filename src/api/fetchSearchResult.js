@@ -1,4 +1,4 @@
-const apiKey = process.env.NEXT_PUBLIC_Service_API_KEY;
+const apiKey = "service.c905ec6c5fcf4d6797ca86aa4de51925";
 
 const headers = {
 	...(apiKey && { "Api-Key": apiKey }),

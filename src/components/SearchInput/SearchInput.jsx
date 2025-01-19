@@ -17,7 +17,7 @@ import Spinner from "../LoadingSpinner/Spinner";
 export default function SearchInput() {
 	const [searchValue, setSearchValue] = useState("");
 	const markerListRef = useRef([]);
-	const [data, setData] = useState();
+	const [data, setData] = useState([]);
 	const { map } = useContext(MapContext);
 	const [isRouting, setIsRouting] = useState(null);
 	const [isLoading, setIsLoading] = useState("idle");
@@ -74,7 +74,7 @@ export default function SearchInput() {
 
 	const handleCancelClick = () => {
 		setSearchValue("");
-		setData(null);
+		setData([]);
 		setIsRouting(null);
 		clearMap(map);
 	};
@@ -105,13 +105,12 @@ export default function SearchInput() {
 						map={map}
 						markerImageUrl={primaryMarkerImage.src}
 						initialLngLat={{
-							lng: item.location.x,
-							lat: item.location.y,
+							lng: item?.location?.x,
+							lat: item?.location?.y,
 						}}
 						item={item}
 						popupImage={foodImage.src}
 						setLngLat={setIsRouting}
-						setData={setData}
 					/>
 				);
 			})}
@@ -119,7 +118,7 @@ export default function SearchInput() {
 			{isRouting !== null && (
 				<MainRouting
 					lngLat={isRouting}
-					handleCancelShowToast={handleCancelShowToast}
+					handleCancelShowToast={setIsRouting}
 				/>
 			)}
 		</>

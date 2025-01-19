@@ -74,7 +74,7 @@ export default function MainRouting({ lngLat, handleCancelShowToast }) {
 				<div className="bg-slate-700 flex text-white text-whiteflex justify-center py-4 px-2 rounded-sm text-sm sm:text-base">
 					<span>کجا هستید؟ با کلیک بر روی نقشه مشخص کنید!</span>
 					<span className="mr-2 border-r-slate-300 pr-1">
-						<X onClick={handleCancelShowToast} width={20} height={20} cursor={"pointer"} />
+						<X onClick={()=>{handleCancelShowToast(null)}} width={20} height={20} cursor={"pointer"} />
 					</span>
 				</div>
 			)}

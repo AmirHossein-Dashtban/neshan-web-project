@@ -11,7 +11,6 @@ const MarkerWithPopup = ({
 	item,
 	popupImage,
 	setLngLat,
-	setData,
 }) => {
 	const markerRef = useRef(null);
 	const popupRef = useRef(null);
@@ -54,7 +53,6 @@ const MarkerWithPopup = ({
 			<Button
 				onClick={() => {
 					setLngLat(initialLngLat);
-					setData(item);
 				}}
 			>
 				مسیریابی
