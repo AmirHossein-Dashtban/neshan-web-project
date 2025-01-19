@@ -2,15 +2,16 @@ import ReactDOM from "react-dom";
 import { Marker, Popup } from "maplibre-gl";
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import { Button } from "../ui/button";
 
 const MarkerWithPopup = ({
 	map,
-	imageUrl,
+	markerImageUrl,
 	initialLngLat,
 	item,
-	hover,
-	setRoutingInfo,
-	router,
+	popupImage,
+	setLngLat,
+	setData,
 }) => {
 	const markerRef = useRef(null);
 	const popupRef = useRef(null);
@@ -22,10 +23,10 @@ const MarkerWithPopup = ({
 		if (!map) return;
 
 		const markerElement = document.createElement("div");
-		markerElement.style.backgroundImage = `url(${imageUrl})`;
+		markerElement.style.backgroundImage = `url(${markerImageUrl})`;
 		markerElement.style.backgroundSize = "cover";
-		markerElement.style.width = hover ? "50px" : "40px";
-		markerElement.style.height = hover ? "50px" : "40px";
+		markerElement.style.width = "40px";
+		markerElement.style.height = "40px";
 		markerElement.style.cursor = "pointer";
 
 		const popup = new Popup({ closeButton: true, closeOnClick: true })
@@ -44,20 +45,21 @@ const MarkerWithPopup = ({
 			marker.remove();
 			popup.remove();
 		};
-	}, [map, imageUrl, initialLngLat, hover, item, setRoutingInfo, router]);
+	}, [map, markerImageUrl, initialLngLat, popupImage]);
 
 	return ReactDOM.createPortal(
 		<>
-			<img src={imageUrl} alt={`رستوران ${item.title}`} />
+			<img src={popupImage} alt={`رستوران ${item.title}`} />
 			<p className="popupContainer-title">{item.title}</p>
-			<button
-				className="popupContainer-routing-button"
-				onClick={() =>
-					setRoutingInfo({ destinationLngLat: initialLngLat })
-				}
+			<Button
+				onClick={() => {
+					setLngLat(initialLngLat);
+					setData(item);
+				}}
 			>
 				مسیریابی
-			</button>
+			</Button>
+
 			<Link
 				className="popupContainer-info-button"
 				href={{

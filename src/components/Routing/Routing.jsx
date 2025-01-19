@@ -6,8 +6,10 @@ import { fetchRoute } from "@/api/fetchRoute";
 import { clearMap, setRoute } from "@/utils/function/setRoute";
 import { Marker } from "maplibre-gl";
 import originPhoto from "@/../public/origin-marker.png";
+import { fitMapToBounds } from "@/utils/function/fitBounds";
+import { X } from "lucide-react";
 
-export default function Routing({ lngLat }) {
+export default function Routing({ lngLat, handleCancelShowToast }) {
 	const [isLoadingRoute, setIsLoadingRoute] = useState("idle");
 	const { map } = useContext(MapContext);
 	const originMarkerRef = useRef();
@@ -43,6 +45,10 @@ export default function Routing({ lngLat }) {
 				fetchRoute(e.lngLat, { lng, lat }).then((res) => {
 					setIsLoadingRoute("success");
 					setRoute(map, res);
+					fitMapToBounds(map, [
+						{ x: e.lngLat.lng, y: e.lngLat.lat },
+						{ x: lng, y: lat },
+					]);
 				});
 			}
 		};
@@ -63,22 +69,25 @@ export default function Routing({ lngLat }) {
 	};
 
 	return (
-		<div className="w-2/3 z-20 flex justify-center fixed left-0 md:left-2 top-4">
+		<div className="lg:w-4/5 tablet:w-2/3 w-full z-20 flex justify-center fixed left-0 md:left-2 top-4">
 			{isLoadingRoute === "idle" && (
-				<div className="bg-slate-200 p-4 phone:w-auto rounded-sm text-sm sm:text-base">
-					کجا می‌خواهید بروید؟ با کلیک بر روی نقشه مشخص کنید!
+				<div className="bg-slate-800 flex justify-center py-4 px-2 text-white rounded-sm text-sm sm:text-base">
+					<span>کجا هستید؟ با کلیک بر روی نقشه مشخص کنید!</span>
+					<span className="mr-2 border-r-slate-500 border-r-2 pr-1">
+						<X onClick={handleCancelShowToast} width={20} height={20} cursor={"pointer"} />
+					</span>
 				</div>
 			)}
 
 			{isLoadingRoute === "loading" && (
-				<div className="bg-slate-200 p-4 phone:w-auto rounded-sm text-sm sm:text-base">
+				<div className="bg-slate-800 p-4 text-white phone:w-auto rounded-sm text-sm sm:text-base">
 					در حال دریافت مسیر...
 				</div>
 			)}
 
 			{isLoadingRoute === "success" && (
 				<button
-					className="bg-slate-200 p-4 phone:w-auto rounded-lg hover:bg-slate-300 text-sm sm:text-base"
+					className="bg-slate-800 p-4 text-white rounded-lg hover:bg-slate-700 text-sm sm:text-base"
 					onClick={handleResetRouting}
 				>
 					مسیریابی مجدد

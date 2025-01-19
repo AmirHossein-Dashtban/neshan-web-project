@@ -117,8 +117,22 @@ body {
   font-size: 1.25em;
 	padding: 0.35rem 0;
   margin-top: 0.75rem;
+  text-align: center;
 }
 
 .popupContainer-info-button:hover {
   background-color: rgb(8, 145, 42);
+}
+
+.scroll-remove {
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
+}
+
+.maplibregl-ctrl-bottom-right  {
+  display: none;
+}
+
+.nextjs-toast, .nextjs-static-indicator-toast-wrapper {
+  display: none;
 }

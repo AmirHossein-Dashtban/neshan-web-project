@@ -36,7 +36,7 @@ export default function Map({ children }) {
 					],
 				},
 				center: [59.5528219217324, 36.32708394227474],
-				zoom: 5,
+				zoom: 10,
 			});
 
 			mapRef.current.on("load", () => {
