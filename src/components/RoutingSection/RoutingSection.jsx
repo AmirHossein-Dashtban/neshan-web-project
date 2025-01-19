@@ -1,13 +1,12 @@
 "use client";
 
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Button } from "../ui/button";
 import Routing from "../Routing/Routing";
 import { SidebarContext } from "@/context/Sidebar";
 
 export default function RoutingSection({ lngLat }) {
-	const [isShowToast, setIsShowToast] = useState(false);
-	const { setHeight } = useContext(SidebarContext);
+	const { setHeight, isShowToast, setIsShowToast } = useContext(SidebarContext);
 
 	const handleShowToast = () => {
 		setIsShowToast(true);
@@ -16,7 +15,7 @@ export default function RoutingSection({ lngLat }) {
 
 	const handleCancelShowToast = () => {
 		setIsShowToast(false);
-		setHeight(window.innerHeight - 300);
+		setHeight(window.innerHeight);
 	};
 
 	return (
