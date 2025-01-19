@@ -1,34 +1,45 @@
 import Siwper from "@/components/ImageSwiper/Siwper";
-import ResturantImage from "../Restaurant.png";
-import ResturantImg from "@/../public/resturant-image.jpg";
 import Info from "@/components/Info/Info";
 
-export default function Page({searchParams}) {
+import foodOne from "@/../public/food-one.jpg";
+import foodTwo from "@/../public/food-two.jpg";
+import foodThree from "@/../public/food-three.jpg";
+import foodFour from "@/../public/food-four.jpg";
+
+export default function Page({ searchParams }) {
 	return (
-		<>
-			<div className="absolute bg-white rounded right-0 top-0 lg:w-1/3 hidden w-full lg:flex flex-col items-center h-full">
-				<Siwper
-					images={[
-						ResturantImage.src,
-						ResturantImg.src,
-						ResturantImage.src,
-					]}
-				/>
+		<section className="w-full absolute top-10">
+			<Siwper images={[foodTwo.src, foodThree.src, foodFour.src]} />
 
-				<Info searchParams={searchParams} />
-			</div>
-
-			<div className="absolute bg-white rounded right-0 top-0 w-full lg:hidden flex flex-col items-center h-full">
-				<Siwper
-					images={[
-						ResturantImage.src,
-						ResturantImg.src,
-						ResturantImage.src,
-					]}
-				/>
-
-				<Info searchParams={searchParams} />
-			</div>
-		</>
+			<Info searchParams={searchParams} />
+		</section>
 	);
+}
+
+{
+	/* <>
+			<>
+				<Siwper
+					images={[
+						ResturantImage.src,
+						ResturantImg.src,
+						ResturantImage.src,
+					]}
+				/>
+
+				<Info searchParams={searchParams} />
+			</>
+
+			<>
+				<Siwper
+					images={[
+						ResturantImage.src,
+						ResturantImg.src,
+						ResturantImage.src,
+					]}
+				/>
+
+				<Info searchParams={searchParams} />
+			</>
+		</> */
 }

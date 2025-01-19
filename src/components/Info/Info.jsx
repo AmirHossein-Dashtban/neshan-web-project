@@ -6,13 +6,12 @@ import RoutingSection from "../RoutingSection/RoutingSection";
 
 export default async function Info({ searchParams }) {
 	const info = await searchParams;
-
 	const { x: lng, y: lat } = JSON.parse(info.lnglat);
 	const imageUrl = JSON.parse(JSON.stringify(SecondaryRestuarantImage)).src;
 
 	return (
 		<>
-			<div className="w-full mt-8">
+			<div className="w-full">
 				<div className="flex flex-col p-3">
 					<div className="mb-2 text-lg">{info.title}</div>
 					<div className="flex items-center">
