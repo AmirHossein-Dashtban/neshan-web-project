@@ -1,15 +1,10 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from 'next/font/local'
+import { Geist } from "next/font/google";
 import "./globals.css";
 import Map from "@/components/Map/Map";
 
-const geistSans = Geist({
-	variable: "--font-geist-sans",
-	subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
-	subsets: ["latin"],
+const vazirMatn = localFont({
+	src: "../../public/fonts/Vazirmatn-Regular.woff2"
 });
 
 export const metadata = {
@@ -21,7 +16,7 @@ export default function RootLayout({ children }) {
 	return (
 		<html lang="en" dir="rtl">
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+				className={vazirMatn.className}
 			>
 				<Map>{children}</Map>
 			</body>
